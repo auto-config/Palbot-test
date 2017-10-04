@@ -158,6 +158,7 @@ keep1Star = false
 keepAll = false
 runTestHighlight = false
 keepSpdMain = false
+screencap = false
 end
 function defaultRegionLocation ()
   FindEmptyFodderSlotsRegion = Region(1540, 210, 30, 35)
@@ -303,11 +304,14 @@ closeNowYesRegion = Region(600, 630, 350, 200)
 closeNowRegion = Region(525, 420, 75, 80)
 friend1Location = Location(15, 1060)
 runeSubRegion = Region(578,469,360,244)
+runeStatRegion = Region(0, 240, 600, 600)
 end
 function captureScreenshot()
+  setImagePath(localPath .. "Runes/")
   wait(1)
   rgn = Region(0, 0, getRealScreenSize():getX(), getRealScreenSize():getY())
-  rgn:save("aaatemp.png")
+  rgn:save(tostring("Rune" .. getNetworkTime() .. ".png"))
+  setImagePath(localPath .. "1920x1080")
 end
 function zoomTest()
   wait(1)
@@ -674,6 +678,12 @@ function runeDialogBox()
   }
   addTextView("Non-flat subs %: ")
   addSpinner("nonFlatSubSelect", spinnerSubPerc, spinnerSubPerc[1])
+  newRow()
+  addCheckBox("screencap", "Screenshot Runes?", false)
+  newRow()
+  addTextView("Screen shots will be saved in the Runes folder.")
+  newRow()
+  addTextView("Advised to empty Runes folder after reviewing.")
   dialogShowFullScreen("Rune Filter")
 end
 function advancedOptionsDialog()
@@ -2047,19 +2057,22 @@ function findRuneSlot()
   local r, g, b = getColor(loc)
   if (r > 70 and r < 150 and g > 70 and g < 150 and b > 70 and b < 150) then
     runeSlot = 2
+    slotString = "2"
   else
     local loc = Location(697, 447)
     local r, g, b = getColor(loc)
     if (r > 70 and r < 150 and g > 70 and g < 150 and b > 70 and b < 150) then
       runeSlot = 4
+      slotString = "4"
     else
       local loc = Location(660, 387)
       local r, g, b = getColor(loc)
-      toast("Color: " .. r .. " " .. g .. " " .. b .. ".")
       if (r > 70 and r < 150 and g > 70 and g < 150 and b > 70 and b < 150) then
         runeSlot = 6
+        slotString = "6"
       else
         runeSlot = 0
+        slotString = "1/3/5"
       end
     end
   end
@@ -2112,7 +2125,6 @@ function sellRune()
   end
 end
 function getRune()
-  getRegion:highlight(2)
   getRegion:existsClick(Pattern("get.png"):similar(.6))
   if runeRank == 6 then r6Count = r6Count + 1
   elseif runeRank == 5 then r5Count = r5Count + 1
@@ -2152,33 +2164,23 @@ function runeKeep2 ()
   end
 end
 function runeKeep3 ()
-  toast("Stat: " .. mainStat .. ".")
   if runeSlot == 2 and mainStat == ("HP") then
-    toast("Flat 2/4/6. Selling Rune.")
     sellRune()
   elseif runeSlot == 2 and mainStat == ("ATK") then
-    toast("Flat 2/4/6. Selling Rune.")
     sellRune()
   elseif runeSlot == 2 and mainStat == ("DEF") then
-    toast("Flat 2/4/6. Selling Rune.")
     sellRune()
   elseif runeSlot == 4 and mainStat == ("HP") then
-    toast("Flat 2/4/6. Selling Rune.")
     sellRune()
   elseif runeSlot == 4 and mainStat == ("ATK") then
-    toast("Flat 2/4/6. Selling Rune.")
     sellRune()
   elseif runeSlot == 4 and mainStat == ("DEF") then
-    toast("Flat 2/4/6. Selling Rune.")
     sellRune()
   elseif runeSlot == 6 and mainStat == ("HP") then
-    toast("Flat 2/4/6. Selling Rune.")
     sellRune()
   elseif runeSlot == 6 and mainStat == ("ATK") then
-    toast("Flat 2/4/6. Selling Rune.")
     sellRune()
   elseif runeSlot == 6 and mainStat == ("DEF") then
-    toast("Flat 2/4/6. Selling Rune.")
     sellRune()
   else
     runeKeep4 ()
@@ -2200,17 +2202,32 @@ function runeKeep4 ()
     runeSubPercCnt = runeSubPercCnt + 1
   end
   subMatch = math.floor(runeSubPercCnt / runeSubCnt * 100)
-  toast("Sub Percent Match " .. subMatch .. "%.")
   if subMatch < nonFlatSub then
-    toast("Selling Rune")
+    sellRune = true
+    keepSell = "Selling Rune"
+    runeKeep5 ()
+  else
+    sellRune = false
+    keepSell = "Keeping Rune"
+    runeKeep5 ()
+  end
+end
+function runeKeep5 ()
+  setHighlightTextStyle(0xf8666666, 0xf80000ff, 16)
+  runeStatString = " " .. runeRank .. " star \n" .. runeRarity .. "(" .. slotString .. ") rune \n Main Stat: " .. mainStat .. "\n Matching subs: " .. subMatch .. "% \n" .. keepSell .. " "
+  runeStatRegion:highlight(runeStatString)
+  if screencap == true then
+    captureScreenshot()
+  end
+  wait(5)
+  if sellRune == true then
     sellRune()
   else
-    toast("Keeping Rune")
     getRune()
   end
 end
 function sellGetRune ()
-  if grindstoneRegion:exists(Pattern("grindstone.png"):similar(.1), 0.1) then
+  if grindstoneRegion:exists(Pattern("grindstone.png"):similar(.6), 0.1) then
     getRune()
   elseif enchantedGemRegion:exists(Pattern("enchantedGem.png"):similar(.6), 0.1) then
     getRune()
