@@ -159,6 +159,7 @@ keepAll = false
 runTestHighlight = false
 keepSpdMain = false
 screencap = false
+sellingRune = false
 end
 function defaultRegionLocation ()
   FindEmptyFodderSlotsRegion = Region(1540, 210, 30, 35)
@@ -174,10 +175,10 @@ fodderSlot3X = Location(435, 745)
 fodderSlot2X = Location(270, 745)
 fodderSlot1X = Location(110, 745)
 mainStatRegion = Region(760, 350, 400, 60)
-runeSlotRegion = Region(630, 340, 130, 130)
+runeSlotRegion = Region(574, 242, 770, 100)
 runeRarityRegion = Region(725, 445, 20, 20)
 runeRankRegion = Region(630, 350, 130, 30)
-grindstoneRegion = Region(760, 450, 540, 140)
+grindstoneRegion = Region(760, 450, 300, 100)
 enchantedGemRegion = Region(750, 350, 350, 150)
 raidJoinRegion = Region(1300, 845, 250, 65)
 raidReadyRegion = Region(1550, 950, 250, 75)
@@ -304,7 +305,7 @@ closeNowYesRegion = Region(600, 630, 350, 200)
 closeNowRegion = Region(525, 420, 75, 80)
 friend1Location = Location(15, 1060)
 runeSubRegion = Region(578,469,360,244)
-runeStatRegion = Region(0, 240, 600, 600)
+runeStatRegion = Region(0, 200, 700, 250)
 end
 function captureScreenshot()
   setImagePath(localPath .. "Runes/")
@@ -2053,28 +2054,27 @@ function findRuneRank()
 end
 function findRuneSlot()
   runeSlotRegion:highlight()
-  local loc = Location(731, 384)
-  local r, g, b = getColor(loc)
-  if (r > 70 and r < 150 and g > 70 and g < 150 and b > 70 and b < 150) then
+  if(runeSlotRegion:exists(Pattern("slotOne.png"):similar(.9), .5)) then
+    runeSlot = 1
+    slotString = "1"
+  elseif(runeSlotRegion:exists(Pattern("slotTwo.png"):similar(.9), .5)) then
     runeSlot = 2
     slotString = "2"
+  elseif(runeSlotRegion:exists(Pattern("slotThree.png"):similar(.9), .5)) then
+    runeSlot = 3
+    slotString = "3"
+  elseif (runeSlotRegion:exists(Pattern("slotFour.png"):similar(.9), .5)) then
+    runeSlot = 4
+    slotString = "4"
+  elseif(runeSlotRegion:exists(Pattern("slotFive.png"):similar(.9), .5)) then
+    runeSlot = 5
+    slotString = "5"
+  elseif (runeSlotRegion:exists(Pattern("slotSix.png"):similar(.9), .5)) then
+    runeSlot = 6
+    slotString = "6"
   else
-    local loc = Location(697, 447)
-    local r, g, b = getColor(loc)
-    if (r > 70 and r < 150 and g > 70 and g < 150 and b > 70 and b < 150) then
-      runeSlot = 4
-      slotString = "4"
-    else
-      local loc = Location(660, 387)
-      local r, g, b = getColor(loc)
-      if (r > 70 and r < 150 and g > 70 and g < 150 and b > 70 and b < 150) then
-        runeSlot = 6
-        slotString = "6"
-      else
-        runeSlot = 0
-        slotString = "1/3/5"
-      end
-    end
+    runeSlot = 0
+    slotString = "1/3/5"
   end
   runeSlotRegion:highlight()
 end
@@ -2101,9 +2101,6 @@ function findMainStat()
     end
   elseif (bestMatchIndex == 4) then
     mainStat = ("SPD")
-    if keepSpdMain == true then
-      getRune()
-    end
   elseif (bestMatchIndex == 5) then
     mainStat = ("CRI Rate")
   elseif (bestMatchIndex == 6) then
@@ -2115,6 +2112,18 @@ function findMainStat()
   else mainStat = ("NONE")
   end
   mainStatRegion:highlight()
+end
+function subEval()
+  if runeSubRegion:exists(Pattern("runeSubPercentage.png"):similar(0.8)) then
+    subTable = listToTable(runeSubRegion:findAll(Pattern("runeSubPercentage.png"):similar(0.8)))
+    runeSubPercCnt = tableLength(subTable)
+  else
+    runeSubPercCnt = 0
+  end
+  if runeSubRegion:exists((Pattern("runeSubSPD.png"):similar(0.8)), 3) then
+    runeSubPercCnt = runeSubPercCnt + 1
+  end
+  subMatch = math.floor(runeSubPercCnt / runeSubCnt * 100)
 end
 function sellRune()
   sellRegion:existsClick(Pattern("sell.png"):similar(.6))
@@ -2143,7 +2152,9 @@ function runeKeep1 ()
   elseif runeRarity == "Normal" and keepNormal == true then
     runeKeep2 ()
   else
-    sellRune()
+    sellingRune = true
+    keepSell = "Selling Rune"
+    runeKeep5 ()
   end
 end
 function runeKeep2 ()
@@ -2160,28 +2171,48 @@ function runeKeep2 ()
   elseif runeRank == 1 and keep1Star == true then
     runeKeep3 ()
   else
-    sellRune()
+    sellingRune = true
+    keepSell = "Selling Rune"
+    runeKeep5 ()
   end
 end
 function runeKeep3 ()
   if runeSlot == 2 and mainStat == ("HP") then
-    sellRune()
+    sellingRune = true
+    keepSell = "Selling Rune"
+    runeKeep5 ()
   elseif runeSlot == 2 and mainStat == ("ATK") then
-    sellRune()
+    sellingRune = true
+    keepSell = "Selling Rune"
+    runeKeep5 ()
   elseif runeSlot == 2 and mainStat == ("DEF") then
-    sellRune()
+    sellingRune = true
+    keepSell = "Selling Rune"
+    runeKeep5 ()
   elseif runeSlot == 4 and mainStat == ("HP") then
-    sellRune()
+    sellingRune = true
+    keepSell = "Selling Rune"
+    runeKeep5 ()
   elseif runeSlot == 4 and mainStat == ("ATK") then
-    sellRune()
+    sellingRune = true
+    keepSell = "Selling Rune"
+    runeKeep5 ()
   elseif runeSlot == 4 and mainStat == ("DEF") then
-    sellRune()
+    sellingRune = true
+    keepSell = "Selling Rune"
+    runeKeep5 ()
   elseif runeSlot == 6 and mainStat == ("HP") then
-    sellRune()
+    sellingRune = true
+    keepSell = "Selling Rune"
+    runeKeep5 ()
   elseif runeSlot == 6 and mainStat == ("ATK") then
-    sellRune()
+    sellingRune = true
+    keepSell = "Selling Rune"
+    runeKeep5 ()
   elseif runeSlot == 6 and mainStat == ("DEF") then
-    sellRune()
+    sellingRune = true
+    keepSell = "Selling Rune"
+    runeKeep5 ()
   else
     runeKeep4 ()
   end
@@ -2192,42 +2223,38 @@ function tableLength(T)
     return count
 end
 function runeKeep4 ()
-  if runeSubRegion:exists(Pattern("runeSubPercentage.png"):similar(0.8)) then
-    subTable = listToTable(runeSubRegion:findAll(Pattern("runeSubPercentage.png"):similar(0.8)))
-    runeSubPercCnt = tableLength(subTable)
-  else
-    runeSubPercCnt = 0
+  if keepSpdMain == true then
+    sellingRune = false
+    keepSell = "Keeping Rune"
+    runeKeep5 ()
   end
-  if runeSubRegion:exists((Pattern("runeSubSPD.png"):similar(0.8)), 3) then
-    runeSubPercCnt = runeSubPercCnt + 1
-  end
-  subMatch = math.floor(runeSubPercCnt / runeSubCnt * 100)
   if subMatch < nonFlatSub then
-    sellRune = true
+    sellingRune = true
     keepSell = "Selling Rune"
     runeKeep5 ()
   else
-    sellRune = false
+    sellingRune = false
     keepSell = "Keeping Rune"
     runeKeep5 ()
   end
 end
 function runeKeep5 ()
-  setHighlightTextStyle(0xf8666666, 0xf80000ff, 16)
+  setHighlightTextStyle(16777215, 4294967295, textSizeNum)
   runeStatString = " " .. runeRank .. " star \n" .. runeRarity .. "(" .. slotString .. ") rune \n Main Stat: " .. mainStat .. "\n Matching subs: " .. subMatch .. "% \n" .. keepSell .. " "
   runeStatRegion:highlight(runeStatString)
   if screencap == true then
     captureScreenshot()
+    wait(10)
   end
-  wait(5)
-  if sellRune == true then
+  if sellingRune == true then
     sellRune()
   else
     getRune()
   end
+  runeStatRegion:highlight(runeStatString)
 end
 function sellGetRune ()
-  if grindstoneRegion:exists(Pattern("grindstone.png"):similar(.6), 0.1) then
+  if grindstoneRegion:exists(Pattern("grindTilde.png"):similar(.6), 0.1) then
     getRune()
   elseif enchantedGemRegion:exists(Pattern("enchantedGem.png"):similar(.6), 0.1) then
     getRune()
@@ -2240,6 +2267,7 @@ function sellGetRune ()
     findRuneRank()
     findRuneSlot()
     findMainStat()
+    subEval()
     runeKeep1()
   end
 end
