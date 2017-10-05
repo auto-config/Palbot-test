@@ -1989,19 +1989,19 @@ function stopSoundVibrate()
 end
 function findRuneRarity()
   runeRarityRegion:highlight()
-  if(runeRarityRegion:exists(Pattern("runeLegendary.png"):similar(0.9), 0.5))
+  if(runeRarityRegion:exists(Pattern("runeLegendary.png"):similar(0.9), 0.5)) then
     runeRarity = "Legendary"
     runeSubCnt = 4
-  elseif (runeRarityRegion:exists(Pattern("runeHero.png"):similar(0.9), 0.5))
+  elseif (runeRarityRegion:exists(Pattern("runeHero.png"):similar(0.9), 0.5)) then
     runeRarity = "Hero"
     runeSubCnt = 3
-  elseif (runeRarityRegion:exists(Pattern("runeRare.png"):similar(0.9), 0.5))
+  elseif (runeRarityRegion:exists(Pattern("runeRare.png"):similar(0.9), 0.5)) then
     runeRarity = "Rare"
     runeSubCnt = 2
-  elseif (runeRarityRegion:exists(Pattern("runeMagic.png"):similar(0.9), 0.5))
+  elseif (runeRarityRegion:exists(Pattern("runeMagic.png"):similar(0.9), 0.5)) then
     runeRarity = "Magic"
     runeSubCnt = 1
-  elseif (runeRarityRegion:exists(Pattern("runeNormal.png"):similar(0.9), 0.5))
+  elseif (runeRarityRegion:exists(Pattern("runeNormal.png"):similar(0.9), 0.5)) then
     runeRarity = "Normal"
     runeSubCnt = 0
   else
