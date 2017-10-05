@@ -176,7 +176,7 @@ fodderSlot2X = Location(270, 745)
 fodderSlot1X = Location(110, 745)
 mainStatRegion = Region(760, 350, 400, 60)
 runeSlotRegion = Region(574, 242, 770, 100)
-runeRarityRegion = Region(725, 445, 20, 20)
+runeRarityRegion = Region(575, 188, 769, 225)
 runeRankRegion = Region(630, 350, 130, 30)
 grindstoneRegion = Region(760, 450, 300, 100)
 enchantedGemRegion = Region(750, 350, 350, 150)
@@ -521,7 +521,7 @@ function dialogBox()
   newRow()
   addTextView("-------------------- Rune Options --------------------")
   newRow()
-  addTextView("Disable both will enable rune filter.")
+  addTextView("Disable both will enable rune filter. Don't enable both.")
   newRow()
   addCheckBox("sellAllRune", "Sell all runes?", false)
   addTextView("  ")
@@ -828,54 +828,71 @@ function setDialogOptions()
   elseif runLmtOption == spinnerBattleLimit[8] then
     runAutoSwitchFodder = true
   end
-  if runeRaritySelect == spinnerRuneRarity[1] then
-    keepLegendary = true
-  elseif runeRaritySelect == spinnerRuneRarity[2] then
-    keepLegendary = true
-    keepHero = true
-  elseif runeRaritySelect == spinnerRuneRarity[3] then
-    keepLegendary = true
-    keepHero = true
-    keepRare = true
-  elseif runeRaritySelect == spinnerRuneRarity[4] then
-    keepLegendary = true
-    keepHero = true
-    keepRare = true
-    keepMagic = true
-  elseif runeRaritySelect == spinnerRuneRarity[5] then
-    keepLegendary = true
-    keepHero = true
-    keepRare = true
-    keepMagic = true
-    keepNormal = true
-  end
-  if runeRuneRankSelect == spinnerRuneRank[1] then
-    keep6Star = true
-  elseif runeRuneRankSelect == spinnerRuneRank[2] then
-    keep6Star = true
-    keep5Star = true
-  elseif runeRuneRankSelect == spinnerRuneRank[3] then
-    keep6Star = true
-    keep5Star = true
-    keep4Star = true
-  elseif runeRuneRankSelect == spinnerRuneRank[4] then
-    keep6Star = true
-    keep5Star = true
-    keep4Star = true
-    keep3Star = true
-  elseif runeRuneRankSelect == spinnerRuneRank[5] then
-    keep6Star = true
-    keep5Star = true
-    keep4Star = true
-    keep3Star = true
-    keep2Star = true
-  elseif runeRuneRankSelect == spinnerRuneRank[6] then
-    keep6Star = true
-    keep5Star = true
-    keep4Star = true
-    keep3Star = true
-    keep2Star = true
-    keep1Star = true
+  if sellAllRune == false and keepAll == false then
+    if runeRaritySelect == spinnerRuneRarity[1] then
+      keepLegendary = true
+    elseif runeRaritySelect == spinnerRuneRarity[2] then
+      keepLegendary = true
+      keepHero = true
+    elseif runeRaritySelect == spinnerRuneRarity[3] then
+      keepLegendary = true
+      keepHero = true
+      keepRare = true
+    elseif runeRaritySelect == spinnerRuneRarity[4] then
+      keepLegendary = true
+      keepHero = true
+      keepRare = true
+      keepMagic = true
+    elseif runeRaritySelect == spinnerRuneRarity[5] then
+      keepLegendary = true
+      keepHero = true
+      keepRare = true
+      keepMagic = true
+      keepNormal = true
+    end
+    if runeRuneRankSelect == spinnerRuneRank[1] then
+      keep6Star = true
+    elseif runeRuneRankSelect == spinnerRuneRank[2] then
+      keep6Star = true
+      keep5Star = true
+    elseif runeRuneRankSelect == spinnerRuneRank[3] then
+      keep6Star = true
+      keep5Star = true
+      keep4Star = true
+    elseif runeRuneRankSelect == spinnerRuneRank[4] then
+      keep6Star = true
+      keep5Star = true
+      keep4Star = true
+      keep3Star = true
+    elseif runeRuneRankSelect == spinnerRuneRank[5] then
+      keep6Star = true
+      keep5Star = true
+      keep4Star = true
+      keep3Star = true
+      keep2Star = true
+    elseif runeRuneRankSelect == spinnerRuneRank[6] then
+      keep6Star = true
+      keep5Star = true
+      keep4Star = true
+      keep3Star = true
+      keep2Star = true
+      keep1Star = true
+    end
+    if nonFlatSubSelect == spinnerSubPerc[1] then
+      nonFlatSub = 0
+    elseif nonFlatSubSelect == spinnerSubPerc[2] then
+      nonFlatSub = 25
+    elseif nonFlatSubSelect == spinnerSubPerc[3] then
+      nonFlatSub = 33
+    elseif nonFlatSubSelect == spinnerSubPerc[4] then
+      nonFlatSub = 50
+    elseif nonFlatSubSelect == spinnerSubPerc[5] then
+      nonFlatSub = 66
+    elseif nonFlatSubSelect == spinnerSubPerc[6] then
+      nonFlatSub = 75
+    elseif nonFlatSubSelect == spinnerSubPerc[7] then
+      nonFlatSub = 100
+    end
   end
   if refillOption == spinnerRefillOption[1] then
     refillEnergy = false
@@ -884,21 +901,6 @@ function setDialogOptions()
   end
   if isPro() and dim then
     setBrightness(1)
-  end
-  if nonFlatSubSelect == spinnerSubPerc[1] then
-    nonFlatSub = 0
-  elseif nonFlatSubSelect == spinnerSubPerc[2] then
-    nonFlatSub = 25
-  elseif nonFlatSubSelect == spinnerSubPerc[3] then
-    nonFlatSub = 33
-  elseif nonFlatSubSelect == spinnerSubPerc[4] then
-    nonFlatSub = 50
-  elseif nonFlatSubSelect == spinnerSubPerc[5] then
-    nonFlatSub = 66
-  elseif nonFlatSubSelect == spinnerSubPerc[6] then
-    nonFlatSub = 75
-  elseif nonFlatSubSelect == spinnerSubPerc[7] then
-    nonFlatSub = 100
   end
 end
 function setAdvancedOptions()
@@ -1987,21 +1989,19 @@ function stopSoundVibrate()
 end
 function findRuneRarity()
   runeRarityRegion:highlight()
-  local loc = Location(735, 455)
-  local r,g,b = getColor(loc)
-  if (r > 40 and b < 40 and g < 40) then
+  if(runeRarityRegion:exists(Pattern("runeLegendary.png"):similar(0.9), 0.5))
     runeRarity = "Legendary"
     runeSubCnt = 4
-  elseif (r > 40 and b > 40 and g < 40) then
+  elseif (runeRarityRegion:exists(Pattern("runeHero.png"):similar(0.9), 0.5))
     runeRarity = "Hero"
     runeSubCnt = 3
-  elseif (r < 40 and b > 40 and g > 40) then
+  elseif (runeRarityRegion:exists(Pattern("runeRare.png"):similar(0.9), 0.5))
     runeRarity = "Rare"
     runeSubCnt = 2
-  elseif (r < 40 and b < 40 and g > 40) then
+  elseif (runeRarityRegion:exists(Pattern("runeMagic.png"):similar(0.9), 0.5))
     runeRarity = "Magic"
     runeSubCnt = 1
-  elseif (r > 40 and b < 40 and g > 40) then
+  elseif (runeRarityRegion:exists(Pattern("runeNormal.png"):similar(0.9), 0.5))
     runeRarity = "Normal"
     runeSubCnt = 0
   else
