@@ -78,6 +78,7 @@ fodderX = 1245
 nonFlatSub = 0
 runeSubCnt = 0
 runeSubPercCnt = 0
+runeDetect = 0.8
 end
 function defaultTrueFalse ()
 isArenaRival = false
@@ -566,21 +567,15 @@ function dialogBox()
     "90"
   }
   spinnerRuneDetectPct = {
+    "60",
+    "65",
+    "70",
+    "75",
     "80",
-    "81",
-    "82",
-    "83",
-    "84",
     "85",
-    "86",
-    "87",
-    "88",
-    "89",
     "90",
-    "91",
-    "92",
-    "93",
-    "94"
+    "95",
+    "99"
   }
   spinnerTextSize = {
     "8",
@@ -626,7 +621,7 @@ function dialogBox()
   addSpinner("imgDetectPct", spinnerImgDetectPct, spinnerImgDetectPct[7])
   addTextView("% Image Accuracy")
   addTextView("    ")
-  addSpinner("runeDetectPct", spinnerRuneDetectPct, spinnerRuneDetectPct[11])
+  addSpinner("runeDetectPct", spinnerRuneDetectPct, spinnerRuneDetectPct[5])
   addTextView("% Rune Accuracy")
   newRow()
   addSpinner("textSize", spinnerTextSize, spinnerTextSize[5])
@@ -698,7 +693,7 @@ function advancedOptionsDialog()
   addSpinner("imgDetectPct", spinnerImgDetectPct, spinnerImgDetectPct[7])
   addTextView("% Image Accuracy")
   addTextView("    ")
-  addSpinner("runeDetectPct", spinnerRuneDetectPct, spinnerRuneDetectPct[11])
+  addSpinner("runeDetectPct", spinnerRuneDetectPct, spinnerRuneDetectPct[5])
   addTextView("% Rune Accuracy")
   newRow()
   addSpinner("textSize", spinnerTextSize, spinnerTextSize[5])
@@ -892,6 +887,25 @@ function setDialogOptions()
       nonFlatSub = 75
     elseif nonFlatSubSelect == spinnerSubPerc[7] then
       nonFlatSub = 100
+    end
+    if runeDetectPct == spinnerRuneDetectPct[1] then
+      runeDetect = 0.6
+    elseif runeDetectPct == spinnerRuneDetectPct[2] then
+      runeDetect = 0.65
+    elseif runeDetectPct == spinnerRuneDetectPct[3] then
+      runeDetect = 0.7
+    elseif runeDetectPct == spinnerRuneDetectPct[4] then
+      runeDetect = 0.75
+    elseif runeDetectPct == spinnerRuneDetectPct[5] then
+      runeDetect = 0.8
+    elseif runeDetectPct == spinnerRuneDetectPct[6] then
+      runeDetect = 0.85
+    elseif runeDetectPct == spinnerRuneDetectPct[7] then
+      runeDetect = 0.9
+    elseif runeDetectPct == spinnerRuneDetectPct[8] then
+      runeDetect = 0.95
+    elseif runeDetectPct == spinnerRuneDetectPct[9] then
+      runeDetect = 0.99
     end
   end
   if refillOption == spinnerRefillOption[1] then
@@ -1988,19 +2002,19 @@ function stopSoundVibrate()
 end
 function findRuneRarity()
   runeRarityRegion:highlight()
-  if(runeRarityRegion:exists(Pattern("runeLegendary.png"):similar(0.8), 0.5)) then
+  if(runeRarityRegion:exists(Pattern("runeLegendary.png"):similar(runeDetect), 0.5)) then
     runeRarity = "Legendary"
     runeSubCnt = 4
-  elseif (runeRarityRegion:exists(Pattern("runeHero.png"):similar(0.9), 0.5)) then
+  elseif (runeRarityRegion:exists(Pattern("runeHero.png"):similar(runeDetect), 0.5)) then
     runeRarity = "Hero"
     runeSubCnt = 3
-  elseif (runeRarityRegion:exists(Pattern("runeRare.png"):similar(0.8), 0.5)) then
+  elseif (runeRarityRegion:exists(Pattern("runeRare.png"):similar(runeDetect), 0.5)) then
     runeRarity = "Rare"
     runeSubCnt = 2
-  elseif (runeRarityRegion:exists(Pattern("runeMagic.png"):similar(0.8), 0.5)) then
+  elseif (runeRarityRegion:exists(Pattern("runeMagic.png"):similar(runeDetect), 0.5)) then
     runeRarity = "Magic"
     runeSubCnt = 1
-  elseif (runeRarityRegion:exists(Pattern("runeNormal.png"):similar(0.7), 0.5)) then
+  elseif (runeRarityRegion:exists(Pattern("runeNormal.png"):similar(runeDetect), 0.5)) then
     runeRarity = "Normal"
     runeSubCnt = 0
   else
