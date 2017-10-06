@@ -176,7 +176,7 @@ fodderSlot2X = Location(270, 745)
 fodderSlot1X = Location(110, 745)
 mainStatRegion = Region(760, 350, 400, 60)
 runeSlotRegion = Region(574, 242, 770, 100)
-runeRarityRegion = Region(575, 188, 769, 225)
+runeRarityRegion = Region(1160, 340, 170, 70)
 runeRankRegion = Region(630, 350, 130, 30)
 grindstoneRegion = Region(760, 450, 300, 100)
 enchantedGemRegion = Region(750, 350, 350, 150)
@@ -1988,19 +1988,19 @@ function stopSoundVibrate()
 end
 function findRuneRarity()
   runeRarityRegion:highlight()
-  if(runeRarityRegion:exists(Pattern("runeLegendary.png"):similar(0.9), 0.5)) then
+  if(runeRarityRegion:exists(Pattern("runeLegendary.png"):similar(0.7), 0.5)) then
     runeRarity = "Legendary"
     runeSubCnt = 4
-  elseif (runeRarityRegion:exists(Pattern("runeHero.png"):similar(0.9), 0.5)) then
+  elseif (runeRarityRegion:exists(Pattern("runeHero.png"):similar(0.7), 0.5)) then
     runeRarity = "Hero"
     runeSubCnt = 3
-  elseif (runeRarityRegion:exists(Pattern("runeRare.png"):similar(0.9), 0.5)) then
+  elseif (runeRarityRegion:exists(Pattern("runeRare.png"):similar(0.7), 0.5)) then
     runeRarity = "Rare"
     runeSubCnt = 2
-  elseif (runeRarityRegion:exists(Pattern("runeMagic.png"):similar(0.9), 0.5)) then
+  elseif (runeRarityRegion:exists(Pattern("runeMagic.png"):similar(0.7), 0.5)) then
     runeRarity = "Magic"
     runeSubCnt = 1
-  elseif (runeRarityRegion:exists(Pattern("runeNormal.png"):similar(0.9), 0.5)) then
+  elseif (runeRarityRegion:exists(Pattern("runeNormal.png"):similar(0.7), 0.5)) then
     runeRarity = "Normal"
     runeSubCnt = 0
   else
