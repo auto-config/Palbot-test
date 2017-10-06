@@ -2253,7 +2253,7 @@ function runeKeep5 ()
   runeStatRegion:highlight(runeStatString)
 end
 function sellGetRune ()
-  if grindstoneRegion:exists(Pattern("grindTilde.png"):similar(.6), 0.1) then
+  if grindstoneRegion:exists(Pattern("grindTilde.png"):similar(.8), 0.1) then
     getRune()
   elseif enchantedGemRegion:exists(Pattern("enchantedGem.png"):similar(.6), 0.1) then
     getRune()
