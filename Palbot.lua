@@ -1991,7 +1991,7 @@ function findRuneRarity()
   if(runeRarityRegion:exists(Pattern("runeLegendary.png"):similar(0.8), 0.5)) then
     runeRarity = "Legendary"
     runeSubCnt = 4
-  elseif (runeRarityRegion:exists(Pattern("runeHero.png"):similar(0.8), 0.5)) then
+  elseif (runeRarityRegion:exists(Pattern("runeHero.png"):similar(0.9), 0.5)) then
     runeRarity = "Hero"
     runeSubCnt = 3
   elseif (runeRarityRegion:exists(Pattern("runeRare.png"):similar(0.8), 0.5)) then
