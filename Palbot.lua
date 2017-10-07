@@ -79,6 +79,7 @@ nonFlatSub = 0
 runeSubCnt = 0
 runeSubPercCnt = 0
 runeDetect = 0.8
+maxDetect = 0.9
 end
 function defaultTrueFalse ()
 isArenaRival = false
@@ -92,9 +93,9 @@ isUsedAllFriend = false
 isMoveRightFodderList = false
 runAutoSwitchFodder = false
 isSwitchFodderSlot1 = false
-isSwitchFodderSlot2 = true
-isSwitchFodderSlot3 = true
-isSwitchFodderSlot4 = true
+isSwitchFodderSlot2 = false
+isSwitchFodderSlot3 = false
+isSwitchFodderSlot4 = false
 sellAllRune = false
 saveAllRune = false
 save6Star = false
@@ -307,6 +308,10 @@ closeNowRegion = Region(525, 420, 75, 80)
 friend1Location = Location(15, 1060)
 runeSubRegion = Region(578,469,360,244)
 runeStatRegion = Region(0, 200, 700, 250)
+slot1MaxRegion = Region(450,668,345,165)
+slot2MaxRegion = Region(825,668,345,165)
+slot3MaxRegion = Region(1215,668,345,165)
+slot4MaxRegion = Region(435,797,345,165)
 end
 function captureScreenshot()
   setImagePath(localPath .. "Runes/")
@@ -512,7 +517,7 @@ function dialogBox()
   addSpinner("refillOption", spinnerRefillOption, spinnerRefillOption[1])
   addTextView("  (refill options)")
   addEditNumber("storageMonsters", 0)
-  addTextView("(Must select Auto-Switch)")
+  addTextView("(# of monsters in storage)")
   newRow()
   addCheckBox("dim", "Dim Screen", false)
   addTextView("  ")
@@ -554,19 +559,28 @@ function dialogBox()
     "Slow"
   }
   spinnerImgDetectPct = {
-    "40",
-    "45",
-    "50",
-    "55",
     "60",
     "65",
     "70",
     "75",
     "80",
     "85",
-    "90"
+    "90",
+    "95",
+    "99"
   }
   spinnerRuneDetectPct = {
+    "60",
+    "65",
+    "70",
+    "75",
+    "80",
+    "85",
+    "90",
+    "95",
+    "99"
+  }
+  spinnerMaxDetectPct = {
     "60",
     "65",
     "70",
@@ -619,10 +633,13 @@ function dialogBox()
   addSpinner("scanSpeed", spinnerScanSpeed, spinnerScanSpeed[2])
   newRow()
   addSpinner("imgDetectPct", spinnerImgDetectPct, spinnerImgDetectPct[7])
-  addTextView("% Image Accuracy")
+  addTextView("% image accuracy")
   addTextView("    ")
   addSpinner("runeDetectPct", spinnerRuneDetectPct, spinnerRuneDetectPct[5])
   addTextView("% Rune Accuracy")
+  addTextView("    ")
+  addSpinner("maxDetectPct", spinnerMaxDetectPct, spinnerMaxDetectPct[7])
+  addTextView("% Maxlevel accuracy")
   newRow()
   addSpinner("textSize", spinnerTextSize, spinnerTextSize[5])
   addTextView("Text Size    ")
@@ -906,6 +923,25 @@ function setDialogOptions()
       runeDetect = 0.95
     elseif runeDetectPct == spinnerRuneDetectPct[9] then
       runeDetect = 0.99
+    end
+    if maxDetectPct == spinnerMaxDetectPct[1] then
+      maxDetect = 0.6
+    elseif maxDetectPct == spinnerMaxDetectPct[2] then
+      maxDetect = 0.65
+    elseif maxDetectPct == spinnerMaxDetectPct[3] then
+      maxDetect = 0.70
+    elseif maxDetectPct == spinnerMaxDetectPct[4] then
+      maxDetect = 0.75
+    elseif maxDetectPct == spinnerMaxDetectPct[5] then
+      maxDetect = 0.80
+    elseif maxDetectPct == spinnerMaxDetectPct[6] then
+      maxDetect = 0.85
+    elseif maxDetectPct == spinnerMaxDetectPct[7] then
+      maxDetect = 0.90
+    elseif maxDetectPct == spinnerMaxDetectPct[8] then
+      maxDetect = 0.95
+    elseif maxDetectPct == spinnerMaxDetectPct[9] then
+      maxDetect = 0.99
     end
   end
   if refillOption == spinnerRefillOption[1] then
@@ -1340,6 +1376,9 @@ function refill()
 end
 function defeated()
   reviveNoRegion:existsClick(Pattern("noRevive.png"):similar(.7), 3)
+  if runAutoSwitchFodder == true or stopMaxLevel == true then
+    isBattleSlotMax()
+  end
   victoryDiamondRegion:existsClick(Pattern("victoryDiamond.png"):similar(.7), 3)
   replayRegion:existsClick(Pattern("replay.png"):similar(.7), 3)
 end
@@ -1389,20 +1428,20 @@ function autoSwitchFodder()
 end
 function clearBattleSlotMax()
   usePreviousSnap(false)
-  getBattleSlotStarLevel()
-  getBattleSlotLevel()
-  isBattleSlotMax()
 ---  if slot1Max == true then
 ---   click(battleSlot1Region)
 ---  end
   if slot2Max == true then
     click(battleSlot2Region)
+    slot2Max = false
   end
   if slot3Max == true then
     click(battleSlot3Region)
+    slot3Max = false
   end
   if slot4Max == true then
     click(battleSlot4Region)
+    slot4Max = false
   end
 end
 function clickFriend()
@@ -1509,414 +1548,20 @@ function fillEmptySlot()
   end
 end
 function isBattleSlotMax()
-    if slot1Level == 15 and slot1StarLevel == 1 then
-      slot1Max = true
-    elseif slot1Level == 20 and slot1StarLevel == 2 then
-      slot1Max = true
-    elseif slot1Level == 25 and slot1StarLevel == 3 then
-      slot1Max = true
-    elseif slot1Level == 30 and slot1StarLevel == 4 then
-      slot1Max = true
-    elseif slot1Level == 35 and slot1StarLevel == 5 then
-      slot1Max = true
-    elseif slot1Level == 40 and slot1StarLevel == 6 then
-      slot1Max = true
-    elseif slot1StarLevel == 0 then
-    else
-      slot1Max = false
-    end
-    if slot2Level == 15 and slot2StarLevel == 1 then
-      slot2Max = true
-    elseif slot2Level == 20 and slot2StarLevel == 2 then
-      slot2Max = true
-    elseif slot2Level == 25 and slot2StarLevel == 3 then
-      slot2Max = true
-    elseif slot2Level == 30 and slot2StarLevel == 4 then
-      slot2Max = true
-    elseif slot2Level == 35 and slot2StarLevel == 5 then
-      slot2Max = true
-    elseif slot2Level == 40 and slot2StarLevel == 6 then
-      slot2Max = true
-    elseif slot2StarLevel == 0 then
-    else
-      slot2Max = false
-    end
-    if slot3Level == 15 and slot3StarLevel == 1 then
-      slot3Max = true
-    elseif slot3Level == 20 and slot3StarLevel == 2 then
-      slot3Max = true
-    elseif slot3Level == 25 and slot3StarLevel == 3 then
-      slot3Max = true
-    elseif slot3Level == 30 and slot3StarLevel == 4 then
-      slot3Max = true
-    elseif slot3Level == 35 and slot3StarLevel == 5 then
-      slot3Max = true
-    elseif slot3Level == 40 and slot3StarLevel == 6 then
-      slot3Max = true
-    elseif slot3StarLevel == 0 then
-    else
-      slot3Max = false
-    end
-    if slot4Level == 15 and slot4StarLevel == 1 then
-      slot4Max = true
-    elseif slot4Level == 20 and slot4StarLevel == 2 then
-      slot4Max = true
-    elseif slot4Level == 25 and slot4StarLevel == 3 then
-      slot4Max = true
-    elseif slot4Level == 30 and slot4StarLevel == 4 then
-      slot4Max = true
-    elseif slot4Level == 35 and slot4StarLevel == 5 then
-      slot4Max = true
-    elseif slot4Level == 40 and slot4StarLevel == 6 then
-      slot4Max = true
-    elseif slot4StarLevel == 0 then
-    else
-      slot4Max = false
-    end
-end
-function getBattleSlotStarLevel()
-    local r, g, b = getColor(Location(540, 232))
-  usePreviousSnap(true)
-    if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-      slot1StarLevel = 6
-    elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-      slot1StarLevel = 6
-    elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-      slot1StarLevel = 6
-    else local r, g, b = getColor(Location(517, 232))
-      if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-        slot1StarLevel = 5
-      elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-        slot1StarLevel = 5
-      elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-        slot1StarLevel = 5
-      else local r, g, b = getColor(Location(494, 232))
-        if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-          slot1StarLevel = 4
-        elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-          slot1StarLevel = 4
-        elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-          slot1StarLevel = 4
-        else local r, g, b = getColor(Location(471, 232))
-          if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-            slot1StarLevel = 3
-          elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-            slot1StarLevel = 3
-          elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-            slot1StarLevel = 3
-          else local r, g, b = getColor(Location(448, 232))
-            if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-              slot1StarLevel = 2
-            elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-              slot1StarLevel = 2
-            elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-              slot1StarLevel = 2
-            else local r, g, b = getColor(Location(425, 232))
-              if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-                slot1StarLevel = 1
-              elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-                slot1StarLevel = 1
-              elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-                slot1StarLevel = 1
-              else
-                slot1StarLevel = 0
-              end
-            end
-          end
-        end
-      end
-    end
-    local r, g, b = getColor(Location(344, 337))
-    if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-      slot2StarLevel = 6
-      toast("slot2star 6")
-    elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-      slot2StarLevel = 6
-      toast("slot2star 6")
-    elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-      slot2StarLevel = 6
-      toast("slot2star 6")
-    else local r, g, b = getColor(Location(321, 337))
-      if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-        slot2StarLevel = 5
-        toast("slot2star 5")
-      elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-        slot2StarLevel = 5
-        toast("slot2star 5")
-      elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-        slot2StarLevel = 5
-        toast("slot2star 5")
-      else local r, g, b = getColor(Location(298, 337))
-        if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-          slot2StarLevel = 4
-          toast("slot2star 4")
-        elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-          slot2StarLevel = 4
-          toast("slot2star 4")
-        elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-          slot2StarLevel = 4
-          toast("slot2star 4")
-        else local r, g, b = getColor(Location(275, 337))
-          if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-            slot2StarLevel = 3
-            toast("slot2star 3")
-          elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-            slot2StarLevel = 3
-            toast("slot2star 3")
-          elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-            slot2StarLevel = 3
-            toast("slot2star 3")
-          else local r, g, b = getColor(Location(252, 337))
-            if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-              slot2StarLevel = 2
-              toast("slot2star 2")
-            elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-              slot2StarLevel = 2
-              toast("slot2star 2")
-            elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-              slot2StarLevel = 2
-              toast("slot2star 2")
-            else local r, g, b = getColor(Location(229, 337))
-              if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-                slot2StarLevel = 1
-                toast("slot2star 1")
-              elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-                slot2StarLevel = 1
-                toast("slot2star 1")
-              elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-                slot2StarLevel = 1
-                toast("slot2star 1")
-              else
-                slot2StarLevel = 0
-                toast("slot2star 0")
-              end
-            end
-          end
-        end
-      end
-    end
-    local r, g, b = getColor(Location(736, 337))
-    if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-      slot3StarLevel = 6
-      toast("slot3star 6")
-    elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-      slot3StarLevel = 6
-      toast("slot3star 6")
-    elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-      slot3StarLevel = 6
-      toast("slot3star 6")
-    else local r, g, b = getColor(Location(713, 337))
-      if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-        slot3StarLevel = 5
-        toast("slot3star 5")
-      elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-        slot3StarLevel = 5
-        toast("slot3star 5")
-      elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-        slot3StarLevel = 5
-        toast("slot3star 5")
-      else local r, g, b = getColor(Location(690, 337))
-        if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-          slot3StarLevel = 4
-          toast("slot3star 4")
-        elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-          slot3StarLevel = 4
-          toast("slot3star 4")
-        elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-          slot3StarLevel = 4
-          toast("slot3star 4")
-        else local r, g, b = getColor(Location(667, 337))
-          if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-            slot3StarLevel = 3
-            toast("slot3star 3")
-          elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-            slot3StarLevel = 3
-            toast("slot3star 3")
-          elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-            slot3StarLevel = 3
-            toast("slot3star 3")
-          else local r, g, b = getColor(Location(644, 337))
-            if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-              slot3StarLevel = 2
-              toast("slot3star 2")
-            elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-              slot3StarLevel = 2
-              toast("slot3star 2")
-            elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-              slot3StarLevel = 2
-              toast("slot3star 2")
-            else local r, g, b = getColor(Location(621, 337))
-              if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-                slot3StarLevel = 1
-                toast("slot3star 1")
-              elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-                slot3StarLevel = 1
-                toast("slot3star 1")
-              elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-                slot3StarLevel = 1
-                toast("slot3star 1")
-              else
-                slot3StarLevel = 0
-                toast("slot3star 0")
-              end
-            end
-          end
-        end
-      end
-    end
-    local r, g, b = getColor(Location(540, 441))
-    if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-      slot4StarLevel = 6
-      toast("slot4star 6")
-    elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-      slot4StarLevel = 6
-      toast("slot4star 6")
-    elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-      slot4StarLevel = 6
-      toast("slot4star 6")
-    else local r, g, b = getColor(Location(517, 441))
-      if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-        slot4StarLevel = 5
-        toast("slot4star 5")
-      elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-        slot4StarLevel = 5
-        toast("slot4star 5")
-      elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-        slot4StarLevel = 5
-        toast("slot4star 5")
-      else local r, g, b = getColor(Location(494, 441))
-        if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-          slot4StarLevel = 4
-          toast("slot4star 4")
-        elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-          slot4StarLevel = 4
-          toast("slot4star 4")
-        elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-          slot4StarLevel = 4
-          toast("slot4star 4")
-        else local r, g, b = getColor(Location(471, 441))
-          if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-            slot4StarLevel = 3
-            toast("slot4star 3")
-          elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-            slot4StarLevel = 3
-            toast("slot4star 3")
-          elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-            slot4StarLevel = 3
-            toast("slot4star 3")
-          else local r, g, b = getColor(Location(448, 441))
-            if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-              slot4StarLevel = 2
-              toast("slot4star 2")
-            elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-              slot4StarLevel = 2
-              toast("slot4star 2")
-            elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-              slot4StarLevel = 2
-              toast("slot4star 2")
-            else local r, g, b = getColor(Location(425, 441))
-              if r > 220 and r < 230 and g > 225 and g < 235 and b > 225 and b < 235 then
-                slot4StarLevel = 1
-                toast("slot4star 1")
-              elseif r > 240 and r < 250 and g > 50 and g < 60  and b > 210 and b < 230 then
-                slot4StarLevel = 1
-                toast("slot4star 1")
-              elseif r > 250 and r <260 and g > 200 and g < 210 and b > 10 and b < 15  then
-                slot4StarLevel = 1
-                toast("slot4star 1")
-              else
-                slot4StarLevel = 0
-                toast("slot4star 0")
-              end
-            end
-          end
-        end
-      end
-    end
-  usePreviousSnap(false)
+  slot2MaxRegion:highlight(1)
+  if slot2MaxRegion:exists(Pattern("levelDone.png"):similar(maxDetect), 0.1) then
+    slot2Max = true
+    toast("Slot2Max")
   end
-function getBattleSlotLevel()
-  local accuracy = .9
-  if battleSlot1Region:exists(Pattern("level40Battle.png"):similar(accuracy), 0.1) then
-    slot1Level = 40
-  elseif battleSlot1Region:exists(Pattern("level35Battle.png"):similar(accuracy), 0.1) then
-    slot1Level = 35
-  elseif battleSlot1Region:exists(Pattern("level30Battle.png"):similar(accuracy), 0.1) then
-    slot1Level = 30
-  elseif battleSlot1Region:exists(Pattern("level25Battle.png"):similar(accuracy), 0.1) then
-    slot1Level = 25
-  elseif battleSlot1Region:exists(Pattern("level20Battle.png"):similar(accuracy), 0.1) then
-    slot1Level = 20
-  elseif battleSlot1Region:exists(Pattern("level15Battle.png"):similar(accuracy), 0.1) then
-    slot1Level = 15
-  else
-    slot1Level = 0
+  slot3MaxRegion:highlight(1)
+  if slot3MaxRegion:exists(Pattern("levelDone.png"):similar(maxDetect), 0.1) then
+    slot3Max = true
+    toast("Slot3Max")
   end
-  if battleSlot2Region:exists(Pattern("level40Battle.png"):similar(accuracy), 0.1) then
-    slot2Level = 40
-    toast("slot2level 40")
-  elseif battleSlot2Region:exists(Pattern("level35Battle.png"):similar(accuracy), 0.1) then
-    slot2Level = 35
-    toast("slot2level 35")
-  elseif battleSlot2Region:exists(Pattern("level30Battle.png"):similar(accuracy), 0.1) then
-    slot2Level = 30
-    toast("slot2level 30")
-  elseif battleSlot2Region:exists(Pattern("level25Battle.png"):similar(accuracy), 0.1) then
-    slot2Level = 25
-    toast("slot2level 25")
-  elseif battleSlot2Region:exists(Pattern("level20Battle.png"):similar(accuracy), 0.1) then
-    slot2Level = 20
-    toast("slot2level 20")
-  elseif battleSlot2Region:exists(Pattern("level15Battle.png"):similar(accuracy), 0.1) then
-    slot2Level = 15
-    toast("slot2level 15")
-  else
-    slot2Level = 0
-    toast("slot2level NotMax")
-  end
-  if battleSlot3Region:exists(Pattern("level40Battle.png"):similar(accuracy), 0.1) then
-    slot3Level = 40
-    toast("slot3level 40")
-  elseif battleSlot3Region:exists(Pattern("level35Battle.png"):similar(accuracy), 0.1) then
-    slot3Level = 35
-    toast("slot3level 35")
-  elseif battleSlot3Region:exists(Pattern("level30Battle.png"):similar(accuracy), 0.1) then
-    slot3Level = 30
-    toast("slot3level 30")
-  elseif battleSlot3Region:exists(Pattern("level25Battle.png"):similar(accuracy), 0.1) then
-    slot3Level = 25
-    toast("slot3level 25")
-  elseif battleSlot3Region:exists(Pattern("level20Battle.png"):similar(accuracy), 0.1) then
-    slot3Level = 20
-    toast("slot3level 20")
-  elseif battleSlot3Region:exists(Pattern("level15Battle.png"):similar(accuracy), 0.1) then
-    slot3Level = 15
-    toast("slot3level 15")
-  else
-    slot3Level = 0
-    toast("slot3level NotMax")
-  end
-  if battleSlot4Region:exists(Pattern("level40Battle.png"):similar(accuracy), 0.1) then
-    slot4Level = 40
-    toast("slot4level 40")
-  elseif battleSlot4Region:exists(Pattern("level35Battle.png"):similar(accuracy), 0.1) then
-    slot4Level = 35
-    toast("slot4level 35")
-  elseif battleSlot4Region:exists(Pattern("level30Battle.png"):similar(accuracy), 0.1) then
-    slot4Level = 30
-    toast("slot4level 30")
-  elseif battleSlot4Region:exists(Pattern("level25Battle.png"):similar(accuracy), 0.1) then
-    slot4Level = 25
-    toast("slot4level 25")
-  elseif battleSlot4Region:exists(Pattern("level20Battle.png"):similar(accuracy), 0.1) then
-    slot4Level = 20
-    toast("slot4level 20")
-  elseif battleSlot4Region:exists(Pattern("level15Battle.png"):similar(accuracy), 0.1) then
-    slot4Level = 15
-    toast("slot4level 15")
-  else
-    slot4Level = 0
-    toast("slot4level NotMax")
+  slot4MaxRegion:highlight(1)
+  if slot4MaxRegion:exists(Pattern("levelDone.png"):similar(maxDetect), 0.1) then
+    slot4Max = true
+    toast("Slot4Max")
   end
 end
 function replaceEmptyBattleSlot()
@@ -1939,9 +1584,6 @@ end
 function checkMaxLevel()
   if stopMaxLevel then
     usePreviousSnap(false)
-    getBattleSlotStarLevel()
-    getBattleSlotLevel()
-    isBattleSlotMax()
     if slot2Max == true then
       isMaxLevel = true
     elseif slot3Max == true then
@@ -4316,6 +3958,9 @@ while true do
       runLmt = runLmt - 1
       showBattleResult("Start Battle")
       resetTimerNoActivity()
+      if runAutoSwitchFodder == true or stopMaxLevel == true then
+        isBattleSlotMax()
+      end
       victory()
       showBattleResult("Battle Start")
       printBattleMessage()
