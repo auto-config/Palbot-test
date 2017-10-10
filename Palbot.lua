@@ -80,6 +80,13 @@ runeSubCnt = 0
 runeSubPercCnt = 0
 runeDetect = 0.8
 maxDetect = 0.9
+rareNum = 0
+runeRarity6 = 0
+runeRarity5 = 0
+runeRarity4 = 0
+runeRarity3 = 0
+runeRarity2 = 0
+runeRarity1 = 0
 end
 function defaultTrueFalse ()
 isArenaRival = false
@@ -656,27 +663,69 @@ function dialogBox()
 end
 function runeDialogBox()
   dialogInit()
-  spinnerRuneRarity = {
-    "Legendary",
-    "Hero",
-    "Rare",
+  addTextView("Set keep rarity based on star grade.")
+  newRow()
+  spinnerRuneRarity6 = {
+    "None",
+    "Normal",
     "Magic",
-    "Normal"
+    "Rare",
+    "Hero",
+    "Legendary"
   }
-  addTextView("Min Rarity: ")
-  addSpinner("runeRaritySelect", spinnerRuneRarity, spinnerRuneRarity[1])
-  addTextView("  ")
-  spinnerRuneRank = {
-    "6*",
-    "5*",
-    "4*",
-    "3*",
-    "2*",
-    "1*"
+  spinnerRuneRarity5 = {
+    "None",
+    "Normal",
+    "Magic",
+    "Rare",
+    "Hero",
+    "Legendary"
   }
-  addTextView("Min Rank: ")
-  addSpinner("runeRuneRankSelect", spinnerRuneRank, spinnerRuneRank[1])
-  addTextView("  ")
+  spinnerRuneRarity4 = {
+    "None",
+    "Normal",
+    "Magic",
+    "Rare",
+    "Hero",
+    "Legendary"
+  }
+  spinnerRuneRarity3 = {
+    "None",
+    "Normal",
+    "Magic",
+    "Rare",
+    "Hero",
+    "Legendary"
+  }
+  spinnerRuneRarity2 = {
+    "None",
+    "Normal",
+    "Magic",
+    "Rare",
+    "Hero",
+    "Legendary"
+  }
+  spinnerRuneRarity1 = {
+    "None",
+    "Normal",
+    "Magic",
+    "Rare",
+    "Hero",
+    "Legendary"
+  }
+  addTextView("6*: ")
+  addSpinner("runeRaritySelect6", spinnerRuneRarity6, spinnerRuneRarity6[1])
+  addTextView("5*: ")
+  addSpinner("runeRaritySelect5", spinnerRuneRarity5, spinnerRuneRarity5[1])
+  addTextView("4*: ")
+  addSpinner("runeRaritySelect4", spinnerRuneRarity4, spinnerRuneRarity4[1])
+  newRow()
+  addTextView("3*: ")
+  addSpinner("runeRaritySelect3", spinnerRuneRarity3, spinnerRuneRarity3[1])
+  addTextView("2*: ")
+  addSpinner("runeRaritySelect2", spinnerRuneRarity2, spinnerRuneRarity2[1])
+  addTextView("1*: ")
+  addSpinner("runeRaritySelect1", spinnerRuneRarity1, spinnerRuneRarity1[1])
   newRow()
   addCheckBox("keepSpdMain", "Always Keep SPD(2)", false)
   newRow()
@@ -841,54 +890,83 @@ function setDialogOptions()
     runAutoSwitchFodder = true
   end
   if sellAllRune == false and keepAll == false then
-    if runeRaritySelect == spinnerRuneRarity[1] then
-      keepLegendary = true
-    elseif runeRaritySelect == spinnerRuneRarity[2] then
-      keepLegendary = true
-      keepHero = true
-    elseif runeRaritySelect == spinnerRuneRarity[3] then
-      keepLegendary = true
-      keepHero = true
-      keepRare = true
-    elseif runeRaritySelect == spinnerRuneRarity[4] then
-      keepLegendary = true
-      keepHero = true
-      keepRare = true
-      keepMagic = true
-    elseif runeRaritySelect == spinnerRuneRarity[5] then
-      keepLegendary = true
-      keepHero = true
-      keepRare = true
-      keepMagic = true
-      keepNormal = true
+    if runeRaritySelect6 == spinnerRuneRarity6[1] then
+      runeRarity6 = 0
+    elseif runeRaritySelect6 == spinnerRuneRarity6[2] then
+      runeRarity6 = 1
+    elseif runeRaritySelect6 == spinnerRuneRarity6[3] then
+      runeRarity6 = 2
+    elseif runeRaritySelect6 == spinnerRuneRarity6[4] then
+      runeRarity6 = 3
+    elseif runeRaritySelect6 == spinnerRuneRarity6[5] then
+      runeRarity6 = 4
+    elseif runeRaritySelect6 == spinnerRuneRarity6[6] then
+      runeRarity6 = 5
     end
-    if runeRuneRankSelect == spinnerRuneRank[1] then
-      keep6Star = true
-    elseif runeRuneRankSelect == spinnerRuneRank[2] then
-      keep6Star = true
-      keep5Star = true
-    elseif runeRuneRankSelect == spinnerRuneRank[3] then
-      keep6Star = true
-      keep5Star = true
-      keep4Star = true
-    elseif runeRuneRankSelect == spinnerRuneRank[4] then
-      keep6Star = true
-      keep5Star = true
-      keep4Star = true
-      keep3Star = true
-    elseif runeRuneRankSelect == spinnerRuneRank[5] then
-      keep6Star = true
-      keep5Star = true
-      keep4Star = true
-      keep3Star = true
-      keep2Star = true
-    elseif runeRuneRankSelect == spinnerRuneRank[6] then
-      keep6Star = true
-      keep5Star = true
-      keep4Star = true
-      keep3Star = true
-      keep2Star = true
-      keep1Star = true
+    if runeRaritySelect5 == spinnerRuneRarity5[1] then
+      runeRarity5 = 0
+    elseif runeRaritySelect5 == spinnerRuneRarity5[2] then
+      runeRarity5 = 1
+    elseif runeRaritySelect5 == spinnerRuneRarity5[3] then
+      runeRarity5 = 2
+    elseif runeRaritySelect5 == spinnerRuneRarity5[4] then
+      runeRarity5 = 3
+    elseif runeRaritySelect5 == spinnerRuneRarity5[5] then
+      runeRarity5 = 4
+    elseif runeRaritySelect5 == spinnerRuneRarity5[6] then
+      runeRarity5 = 5
+    end
+    if runeRaritySelect4 == spinnerRuneRarity4[1] then
+      runeRarity4 = 0
+    elseif runeRaritySelect4 == spinnerRuneRarity4[2] then
+      runeRarity4 = 1
+    elseif runeRaritySelect4 == spinnerRuneRarity4[3] then
+      runeRarity4 = 2
+    elseif runeRaritySelect4 == spinnerRuneRarity4[4] then
+      runeRarity4 = 3
+    elseif runeRaritySelect4 == spinnerRuneRarity4[5] then
+      runeRarity4 = 4
+    elseif runeRaritySelect4 == spinnerRuneRarity4[6] then
+      runeRarity4 = 5
+    end
+    if runeRaritySelect3 == spinnerRuneRarity3[1] then
+      runeRarity3 = 0
+    elseif runeRaritySelect3 == spinnerRuneRarity3[2] then
+      runeRarity3 = 1
+    elseif runeRaritySelect3 == spinnerRuneRarity3[3] then
+      runeRarity3 = 2
+    elseif runeRaritySelect3 == spinnerRuneRarity3[4] then
+      runeRarity3 = 3
+    elseif runeRaritySelect3 == spinnerRuneRarity3[5] then
+      runeRarity3 = 4
+    elseif runeRaritySelect3 == spinnerRuneRarity3[6] then
+      runeRarity3 = 5
+    end
+    if runeRaritySelect2 == spinnerRuneRarity2[1] then
+      runeRarity2 = 0
+    elseif runeRaritySelect2 == spinnerRuneRarity2[2] then
+      runeRarity2 = 1
+    elseif runeRaritySelect2 == spinnerRuneRarity2[3] then
+      runeRarity2 = 2
+    elseif runeRaritySelect2 == spinnerRuneRarity2[4] then
+      runeRarity2 = 3
+    elseif runeRaritySelect2 == spinnerRuneRarity2[5] then
+      runeRarity2 = 4
+    elseif runeRaritySelect2 == spinnerRuneRarity2[6] then
+      runeRarity2 = 5
+    end
+    if runeRaritySelect1 == spinnerRuneRarity1[1] then
+      runeRarity1 = 0
+    elseif runeRaritySelect1 == spinnerRuneRarity1[2] then
+      runeRarity1 = 1
+    elseif runeRaritySelect1 == spinnerRuneRarity1[3] then
+      runeRarity1 = 2
+    elseif runeRaritySelect1 == spinnerRuneRarity1[4] then
+      runeRarity1 = 3
+    elseif runeRaritySelect1 == spinnerRuneRarity1[5] then
+      runeRarity1 = 4
+    elseif runeRaritySelect1 == spinnerRuneRarity1[6] then
+      runeRarity1 = 5
     end
     if nonFlatSubSelect == spinnerSubPerc[1] then
       nonFlatSub = 0
@@ -1646,21 +1724,27 @@ function findRuneRarity()
   runeRarityRegion:highlight()
   if(runeRarityRegion:exists(Pattern("runeLegendary.png"):similar(runeDetect), 0.5)) then
     runeRarity = "Legendary"
+    rareNum = 5
     runeSubCnt = 4
   elseif (runeRarityRegion:exists(Pattern("runeHero.png"):similar(runeDetect), 0.5)) then
     runeRarity = "Hero"
+    rareNum = 4
     runeSubCnt = 3
   elseif (runeRarityRegion:exists(Pattern("runeRare.png"):similar(runeDetect), 0.5)) then
     runeRarity = "Rare"
+    rareNum = 3
     runeSubCnt = 2
   elseif (runeRarityRegion:exists(Pattern("runeMagic.png"):similar(runeDetect), 0.5)) then
     runeRarity = "Magic"
+    rareNum = 2
     runeSubCnt = 1
   elseif (runeRarityRegion:exists(Pattern("runeNormal.png"):similar(runeDetect), 0.5)) then
     runeRarity = "Normal"
+    rareNum = 1
     runeSubCnt = 0
   else
-    runeRarity = "NONE"
+    runeRarity = "None"
+    rareNum = 0
     runeSubCnt = 0
     scriptExit ( "This rune's rarity cannot be determined")
   end
@@ -1796,34 +1880,17 @@ function getRune()
   end
 end
 function runeKeep1 ()
-  if runeRarity == "Legendary" and keepLegendary == true then
-    runeKeep2 ()
-  elseif runeRarity == "Hero" and keepHero == true then
-    runeKeep2 ()
-  elseif runeRarity == "Rare" and keepRare == true then
-    runeKeep2 ()
-  elseif runeRarity == "Magic" and keepMagic == true then
-    runeKeep2 ()
-  elseif runeRarity == "Normal" and keepNormal == true then
-    runeKeep2 ()
-  else
-    sellingRune = true
-    keepSell = "Selling Rune"
-    runeKeep5 ()
-  end
-end
-function runeKeep2 ()
-  if runeRank == 6 and keep6Star == true then
+  if runeRank == 6 and rareNum >= runeRarity6 then
     runeKeep3 ()
-  elseif runeRank == 5 and keep5Star == true then
+  elseif runeRank == 5 and rareNum >= runeRarity5 then
     runeKeep3 ()
-  elseif runeRank == 4 and keep4Star == true then
+  elseif runeRank == 4 and rareNum >= runeRarity4 then
     runeKeep3 ()
-  elseif runeRank == 3 and keep3Star == true then
+  elseif runeRank == 3 and rareNum >= runeRarity3 then
     runeKeep3 ()
-  elseif runeRank == 2 and keep2Star == true then
+  elseif runeRank == 2 and rareNum >= runeRarity2 then
     runeKeep3 ()
-  elseif runeRank == 1 and keep1Star == true then
+  elseif runeRank == 1 and rareNum >= runeRarity1 then
     runeKeep3 ()
   else
     sellingRune = true
