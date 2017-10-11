@@ -19,6 +19,7 @@ battleSlotStarLevelImages = { "star6BattlePink.png", "star6BattleWhite.png", "st
   "star3BattlePink.png", "star3BattleWhite.png", "star2BattlePink.png",
   "star2BattleWhite.png", "star1BattleWhite.png", }
 FodderSlotImages = {"0FodderSlot.png", "1FodderSlot.png", "2FodderSlot.png", "3FodderSlot.png", "4FodderSlot.png"}
+runeRarityImages = {"runeLegendary.png", "runeHero.png", "runeRare.png", "runeMagic.png", "runeNormal.png"}
 function automaticUpdates ()
   if autoUpdate == true then
     if currentVersion == latestVersion then
@@ -639,7 +640,7 @@ function dialogBox()
   addTextView("Scan Speed: ")
   addSpinner("scanSpeed", spinnerScanSpeed, spinnerScanSpeed[2])
   newRow()
-  addSpinner("imgDetectPct", spinnerImgDetectPct, spinnerImgDetectPct[7])
+  addSpinner("imgDetectPct", spinnerImgDetectPct, spinnerImgDetectPct[5])
   addTextView("% image accuracy")
   addTextView("    ")
   addSpinner("runeDetectPct", spinnerRuneDetectPct, spinnerRuneDetectPct[5])
@@ -756,7 +757,7 @@ function advancedOptionsDialog()
   addTextView("    Scan Speed: ")
   addSpinner("scanSpeed", spinnerScanSpeed, spinnerScanSpeed[2])
   newRow()
-  addSpinner("imgDetectPct", spinnerImgDetectPct, spinnerImgDetectPct[7])
+  addSpinner("imgDetectPct", spinnerImgDetectPct, spinnerImgDetectPct[5])
   addTextView("% Image Accuracy")
   addTextView("    ")
   addSpinner("runeDetectPct", spinnerRuneDetectPct, spinnerRuneDetectPct[5])
@@ -1722,23 +1723,24 @@ function stopSoundVibrate()
 end
 function findRuneRarity()
   runeRarityRegion:highlight()
-  if(runeRarityRegion:exists(Pattern("runeLegendary.png"):similar(runeDetect), 0.5)) then
+  local bestMatchIndex = existsMultiMax(runeRarityImages, runeRarityRegion)
+  if (bestMatchIndex == 1) then
     runeRarity = "Legendary"
     rareNum = 5
     runeSubCnt = 4
-  elseif (runeRarityRegion:exists(Pattern("runeHero.png"):similar(runeDetect), 0.5)) then
+  elseif (bestMatchIndex == 2) then
     runeRarity = "Hero"
     rareNum = 4
     runeSubCnt = 3
-  elseif (runeRarityRegion:exists(Pattern("runeRare.png"):similar(runeDetect), 0.5)) then
+  elseif (bestMatchIndex == 3) then
     runeRarity = "Rare"
     rareNum = 3
     runeSubCnt = 2
-  elseif (runeRarityRegion:exists(Pattern("runeMagic.png"):similar(runeDetect), 0.5)) then
+  elseif (bestMatchIndex == 4) then
     runeRarity = "Magic"
     rareNum = 2
     runeSubCnt = 1
-  elseif (runeRarityRegion:exists(Pattern("runeNormal.png"):similar(runeDetect), 0.5)) then
+  elseif (bestMatchIndex == 5) then
     runeRarity = "Normal"
     rareNum = 1
     runeSubCnt = 0
@@ -1945,12 +1947,11 @@ function tableLength(T)
     return count
 end
 function runeKeep4 ()
-  if keepSpdMain == true then
+  if keepSpdMain == true and mainStat == ("SPD") then
     sellingRune = false
     keepSell = "Keeping Rune"
     runeKeep5 ()
-  end
-  if subMatch < nonFlatSub then
+  elseif subMatch < nonFlatSub then
     sellingRune = true
     keepSell = "Selling Rune"
     runeKeep5 ()
