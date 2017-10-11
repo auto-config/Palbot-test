@@ -168,7 +168,8 @@ keep1Star = false
 keepAll = false
 runTestHighlight = false
 keepSpdMain = false
-screencap = false
+screenshotSell = false
+screenshotKeep = false
 sellingRune = false
 end
 function defaultRegionLocation ()
@@ -742,7 +743,10 @@ function runeDialogBox()
   addTextView("Non-flat subs %: ")
   addSpinner("nonFlatSubSelect", spinnerSubPerc, spinnerSubPerc[1])
   newRow()
-  addCheckBox("screencap", "Screenshot Runes?", false)
+  addTextView("Screenshot Runes: ")
+  addCheckBox("screenshotKeep", "Kept Runes?", false)
+  addTextView("  ")
+  addCheckBox("screenshotSell", "Sold Runes?", false)
   newRow()
   addTextView("Screen shots will be saved in the Runes folder.")
   newRow()
@@ -1785,6 +1789,7 @@ function findRuneRank()
               runeRank = 1
             else
               runeRank = "NONE"
+              scriptExit ( "This rune's star grade cannot be determined")
             end
           end
         end
@@ -1816,6 +1821,7 @@ function findRuneSlot()
   else
     runeSlot = 0
     slotString = "1/3/5"
+    scriptExit ( "This rune's slot cannot be determined")
   end
   runeSlotRegion:highlight()
 end
@@ -1851,6 +1857,7 @@ function findMainStat()
   elseif (bestMatchIndex == 8) then
     mainStat = ("ACC")
   else mainStat = ("NONE")
+    scriptExit ( "This rune's main stat cannot be determined")
   end
   mainStatRegion:highlight()
 end
@@ -1867,6 +1874,9 @@ function subEval()
   subMatch = math.floor(runeSubPercCnt / runeSubCnt * 100)
 end
 function sellRune()
+  if screenshotSell == true then
+    captureScreenshot()
+  end
   sellRegion:existsClick(Pattern("sell.png"):similar(.6))
   runeYesRegion:existsClick(Pattern("yes.png"):similar(.6))
   if runeRank == 6 then r6Sold = r6Sold + 1
@@ -1875,6 +1885,9 @@ function sellRune()
   end
 end
 function getRune()
+  if screenshotKeep == true then
+    captureScreenshot()
+  end
   getRegion:existsClick(Pattern("get.png"):similar(.6))
   if runeRank == 6 then r6Count = r6Count + 1
   elseif runeRank == 5 then r5Count = r5Count + 1
@@ -1965,10 +1978,6 @@ function runeKeep5 ()
   setHighlightTextStyle(16777215, 4294967295, textSizeNum)
   runeStatString = " " .. runeRank .. " star \n" .. runeRarity .. "(" .. slotString .. ") rune \n Main Stat: " .. mainStat .. "\n Matching subs: " .. subMatch .. "% \n" .. keepSell .. " "
   runeStatRegion:highlight(runeStatString)
-  if screencap == true then
-    captureScreenshot()
-    wait(10)
-  end
   if sellingRune == true then
     sellRune()
   else
