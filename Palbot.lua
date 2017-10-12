@@ -47,6 +47,7 @@ r5Count = 0
 r5Sold = 0
 runeSold = 0
 runLmt = 0
+bNum = 10
 customRunLmt = 0
 runLmtGroup = 0
 delayAmt = 0
@@ -463,15 +464,15 @@ function dialogBox()
   spinnerFarmLoc = {
     "Current Battle",
     "------------------------------------------",
-    "Giant's Keep B10 + Arena",
-    "Dragon's Lair B10 + Arena",
-    "Necropolis B10 + Arena",
-    "Hall of Magic B10 + Arena",
-    "Hall of Light B10 + Arena",
-    "Hall of Dark B10 + Arena",
-    "Hall of Fire B10 + Arena",
-    "Hall of Water B10 + Arena",
-    "Hall of Wind B10 + Arena",
+    "Giant's Keep + Arena",
+    "Dragon's Lair + Arena",
+    "Necropolis + Arena",
+    "Hall of Magic + Arena",
+    "Hall of Light + Arena",
+    "Hall of Dark + Arena",
+    "Hall of Fire + Arena",
+    "Hall of Water + Arena",
+    "Hall of Wind + Arena",
     "Secret Dungeon 1st + Arena",
     "------------------------------------------",
     "Rift (Fire Beast) + Arena",
@@ -499,10 +500,27 @@ function dialogBox()
     "Live Arena",
     "Speed QuickClick"
   }
+  spinnerLevel = {
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "B7",
+    "B8",
+    "B9",
+    "B10"
+  }
   addTextView("Farming Mode: ")
   addSpinner("farmLoc", spinnerFarmLoc, spinnerFarmLoc[1])
   addTextView("  ")
-  addCheckBox("runMagicShop", "Check Magic Shop Scrolls", false)
+  addTextView("Dungeon level: ")
+  addSpinner("dungeonLevel", spinnerLevel, spinnerLevel[10])
+  newRow()
+  addTextView("Dungeon level only applies to Carios Dungeon.")
+  newRow()
+  addCheckBox("runMagicShop", "Check Magic Shop for scrolls:", false)
   newRow()
   spinnerBattleLimit = {
     "Infinite Runs",
@@ -871,6 +889,27 @@ function setDialogOptions()
     runLiveArena = true
   elseif farmLoc == spinnerFarmLoc[37] then
     runQuickClick = true
+  end
+  if dungeonLevel == spinnerLevel[1] then
+    bNum = 1
+  elseif dungeonLevel == spinnerLevel[2] then
+    bNum = 2
+  elseif dungeonLevel == spinnerLevel[3] then
+    bNum = 3
+  elseif dungeonLevel == spinnerLevel[4] then
+    bNum = 4
+  elseif dungeonLevel == spinnerLevel[5] then
+    bNum = 5
+  elseif dungeonLevel == spinnerLevel[6] then
+    bNum = 6
+  elseif dungeonLevel == spinnerLevel[7] then
+    bNum = 7
+  elseif dungeonLevel == spinnerLevel[8] then
+    bNum = 8
+  elseif dungeonLevel == spinnerLevel[9] then
+    bNum = 9
+  elseif dungeonLevel == spinnerLevel[10] then
+    bNum = 10
   end
   if runLmtOption == spinnerBattleLimit[1] then
     runNum = false
@@ -2466,11 +2505,19 @@ function clickGiantB10()
     dragDrop(Location(1200, 835), Location(1200, 320))
     wait(1)
     dragDrop(Location(1200, 835), Location(1200, 320))
-    if dungeonBattleRegion:exists(Pattern("mapB10.png"):targetOffset(setLocation(453, 0))) then
-        dungeonBattleRegion:existsClick(Pattern("mapB10.png"):targetOffset(setLocation(453, 0)))
+    if bNum < 7 then
+      wait(1)
+      dragDrop(Location(1200, 320), Location(1200, 835))
+      if bNum < 4 then
+        wait(1)
+        dragDrop(Location(1200, 320), Location(1200, 835))
+      end
+    end
+    if dungeonBattleRegion:exists(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0))) then
+        dungeonBattleRegion:existsClick(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
     elseif dungeonListRegion:exists(Pattern("mapGiantsKeep.png"):similar(imgAccuracy), 1) then
         keyevent(4)
-        toast("Couldn't find B10, going back")
+        toast("Couldn't find B"..bNum..", going back")
         findDungeon()
     end
   end
@@ -2481,11 +2528,19 @@ function clickDragonB10()
     dragDrop(Location(1200, 835), Location(1200, 320))
     wait(1)
     dragDrop(Location(1200, 835), Location(1200, 320))
-    if dungeonBattleRegion:exists(Pattern("mapB10.png"):targetOffset(setLocation(453, 0))) then
-        dungeonBattleRegion:existsClick(Pattern("mapB10.png"):targetOffset(setLocation(453, 0)))
+    if bNum < 7 then
+      wait(1)
+      dragDrop(Location(1200, 320), Location(1200, 835))
+      if bNum < 4 then
+        wait(1)
+        dragDrop(Location(1200, 320), Location(1200, 835))
+      end
+    end
+    if dungeonBattleRegion:exists(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0))) then
+        dungeonBattleRegion:existsClick(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
     elseif dungeonListRegion:exists(Pattern("mapDragonsLair.png"):similar(imgAccuracy), 1) then
         keyevent(4)
-        toast("Couldn't find B10, going back")
+        toast("Couldn't find B"..bNum..", going back")
         findDungeon()
     end
   end
@@ -2496,11 +2551,19 @@ function clickNecroB10()
     dragDrop(Location(1200, 835), Location(1200, 320))
     wait(1)
     dragDrop(Location(1200, 835), Location(1200, 320))
-    if dungeonBattleRegion:exists(Pattern("mapB10.png"):targetOffset(setLocation(453, 0))) then
-        dungeonBattleRegion:existsClick(Pattern("mapB10.png"):targetOffset(setLocation(453, 0)))
+    if bNum < 7 then
+      wait(1)
+      dragDrop(Location(1200, 320), Location(1200, 835))
+      if bNum < 4 then
+        wait(1)
+        dragDrop(Location(1200, 320), Location(1200, 835))
+      end
+    end
+    if dungeonBattleRegion:exists(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0))) then
+        dungeonBattleRegion:existsClick(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
     elseif dungeonListRegion:exists(Pattern("mapNecropolis.png"):similar(imgAccuracy), 1) then
         keyevent(4)
-        toast("Couldn't find B10, going back")
+        toast("Couldn't find B"..bNum..", going back")
         findDungeon()
     end
   end
@@ -2512,7 +2575,7 @@ function clickSD()
         sdChargeRegion:existsClick(Pattern("sdCharge.png"), 1)
     elseif dungeonListRegion:exists(Pattern("mapSD.png"):similar(imgAccuracy), 1) then
         keyevent(4)
-        toast("Couldn't find B10, going back")
+        toast("Couldn't find B"..bNum..", going back")
         findDungeon()
     end
   end
@@ -2644,37 +2707,103 @@ end
 function clickHallofMagicB10()
   if dungeonListRegion:existsClick(Pattern("mapHallofMagic.png"):similar(imgAccuracy), 1) then
     wait(2)
-    dungeonBattleRegion:click(Pattern("mapB10.png"):targetOffset(setLocation(453, 0)))
+    dragDrop(Location(1200, 835), Location(1200, 320))
+    wait(1)
+    dragDrop(Location(1200, 835), Location(1200, 320))
+    if bNum < 7 then
+      wait(1)
+      dragDrop(Location(1200, 320), Location(1200, 835))
+      if bNum < 4 then
+        wait(1)
+        dragDrop(Location(1200, 320), Location(1200, 835))
+      end
+    end
+    dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
   end
 end
 function clickHallofLightB10()
   if dungeonListRegion:existsClick(Pattern("mapHallofLight.png"):similar(imgAccuracy), 1) then
     wait(2)
-    dungeonBattleRegion:click(Pattern("mapB10.png"):targetOffset(setLocation(453, 0)))
+    dragDrop(Location(1200, 835), Location(1200, 320))
+    wait(1)
+    dragDrop(Location(1200, 835), Location(1200, 320))
+    if bNum < 7 then
+      wait(1)
+      dragDrop(Location(1200, 320), Location(1200, 835))
+      if bNum < 4 then
+        wait(1)
+        dragDrop(Location(1200, 320), Location(1200, 835))
+      end
+    end
+    dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
   end
 end
 function clickHallofDarkB10()
   if dungeonListRegion:existsClick(Pattern("mapHallofDark.png"):similar(imgAccuracy), 1) then
     wait(2)
-    dungeonBattleRegion:click(Pattern("mapB10.png"):targetOffset(setLocation(453, 0)))
+    dragDrop(Location(1200, 835), Location(1200, 320))
+    wait(1)
+    dragDrop(Location(1200, 835), Location(1200, 320))
+    if bNum < 7 then
+      wait(1)
+      dragDrop(Location(1200, 320), Location(1200, 835))
+      if bNum < 4 then
+        wait(1)
+        dragDrop(Location(1200, 320), Location(1200, 835))
+      end
+    end
+    dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
   end
 end
 function clickHallofFireB10()
   if dungeonListRegion:existsClick(Pattern("mapHallofFire.png"):similar(imgAccuracy), 1) then
     wait(2)
-    dungeonBattleRegion:click(Pattern("mapB10.png"):targetOffset(setLocation(453, 0)))
+    dragDrop(Location(1200, 835), Location(1200, 320))
+    wait(1)
+    dragDrop(Location(1200, 835), Location(1200, 320))
+    if bNum < 7 then
+      wait(1)
+      dragDrop(Location(1200, 320), Location(1200, 835))
+      if bNum < 4 then
+        wait(1)
+        dragDrop(Location(1200, 320), Location(1200, 835))
+      end
+    end
+    dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
   end
 end
 function clickHallofWaterB10()
   if dungeonListRegion:existsClick(Pattern("mapHallofWater.png"):similar(imgAccuracy), 1) then
     wait(2)
-    dungeonBattleRegion:click(Pattern("mapB10.png"):targetOffset(setLocation(453, 0)))
+    dragDrop(Location(1200, 835), Location(1200, 320))
+    wait(1)
+    dragDrop(Location(1200, 835), Location(1200, 320))
+    if bNum < 7 then
+      wait(1)
+      dragDrop(Location(1200, 320), Location(1200, 835))
+      if bNum < 4 then
+        wait(1)
+        dragDrop(Location(1200, 320), Location(1200, 835))
+      end
+    end
+    dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
   end
 end
 function clickHallofWindB10()
   if dungeonListRegion:existsClick(Pattern("mapHallofWind.png"):similar(imgAccuracy), 1) then
     wait(2)
-    dungeonBattleRegion:click(Pattern("mapB10.png"):targetOffset(setLocation(453, 0)))
+    dragDrop(Location(1200, 835), Location(1200, 320))
+    wait(1)
+    dragDrop(Location(1200, 835), Location(1200, 320))
+    if bNum < 7 then
+      wait(1)
+      dragDrop(Location(1200, 320), Location(1200, 835))
+      if bNum < 4 then
+        wait(1)
+        dragDrop(Location(1200, 320), Location(1200, 835))
+      end
+    end
+    dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
   end
 end
 function clickHallB10()
