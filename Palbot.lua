@@ -1748,6 +1748,10 @@ function findRuneRarity()
     runeRarity = "Normal"
     rareNum = 1
     runeSubCnt = 0
+  else
+    runeRarity = "Legendary"
+    rareNum = 5
+    runeSubCnt = 1
   end
   runeRarityRegion:highlight()
 end
@@ -1815,7 +1819,6 @@ function findRuneSlot()
   else
     runeSlot = 1
     slotString = "1/3/5"
-    scriptExit ( "This rune's slot cannot be determined")
   end
   runeSlotRegion:highlight()
 end
