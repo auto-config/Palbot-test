@@ -1748,11 +1748,6 @@ function findRuneRarity()
     runeRarity = "Normal"
     rareNum = 1
     runeSubCnt = 0
-  else
-    runeRarity = "None"
-    rareNum = 0
-    runeSubCnt = 0
-    scriptExit ( "This rune's rarity cannot be determined")
   end
   runeRarityRegion:highlight()
 end
@@ -1788,8 +1783,7 @@ function findRuneRank()
             if (r > 200 and g > 200 and b > 200) then
               runeRank = 1
             else
-              runeRank = "NONE"
-              scriptExit ( "This rune's star grade cannot be determined")
+              runeRank = 6
             end
           end
         end
@@ -1819,7 +1813,7 @@ function findRuneSlot()
     runeSlot = 6
     slotString = "6"
   else
-    runeSlot = 0
+    runeSlot = 1
     slotString = "1/3/5"
     scriptExit ( "This rune's slot cannot be determined")
   end
