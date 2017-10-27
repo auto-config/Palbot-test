@@ -172,6 +172,8 @@ keepSpdMain = false
 screenshotSell = false
 screenshotKeep = false
 sellingRune = false
+runRival = false
+runMatchUp = false
 end
 function defaultRegionLocation ()
   FindEmptyFodderSlotsRegion = Region(1540, 210, 30, 35)
@@ -464,39 +466,39 @@ function dialogBox()
   spinnerFarmLoc = {
     "Current Battle",
     "------------------------------------------",
-    "Giant's Keep + Arena",
-    "Dragon's Lair + Arena",
-    "Necropolis + Arena",
-    "Hall of Magic + Arena",
-    "Hall of Light + Arena",
-    "Hall of Dark + Arena",
-    "Hall of Fire + Arena",
-    "Hall of Water + Arena",
-    "Hall of Wind + Arena",
-    "Secret Dungeon 1st + Arena",
+    "Giant's Keep",
+    "Dragon's Lair",
+    "Necropolis",
+    "Hall of Magic",
+    "Hall of Light",
+    "Hall of Dark",
+    "Hall of Fire",
+    "Hall of Water",
+    "Hall of Wind",
+    "Secret Dungeon 1st",
     "------------------------------------------",
-    "Rift (Fire Beast) + Arena",
-    "Rift (Ice Beast) + Arena",
-    "Rift (Wind Beast) + Arena",
-    "Rift (Light Beast) + Arena",
-    "Rift (Dark Beast) + Arena",
-    "Rift Raid + Arena",
+    "Rift (Fire Beast)",
+    "Rift (Ice Beast)",
+    "Rift (Wind Beast)",
+    "Rift (Light Beast)",
+    "Rift (Dark Beast)",
+    "Rift Raid",
     "------------------------------------------",
-    "Chiruka Remains S1 + Arena  ",
-    "Mt. Runar S2 + Arena",
-    "Ferun Castle S1 + Arena",
-    "Aiden Forest S1 + Arena",
-    "Faimon Volcano S1 + Arena",
-    "Vrofagus Ruins S4 + Arena",
-    "Tamor Desert S3 + Arena",
-    "Hydeni Ruins S5 + Arena",
-    "Telain Forest S1 + Arena",
-    "Mt. White Ragon S2 + Arena",
-    "Kabir Ruins S4 + Arena",
-    "Mt. Siz S2 + Arena",
-    "Garen Forest S3 + Arena",
+    "Chiruka Remains S1",
+    "Mt. Runar S2",
+    "Ferun Castle S1",
+    "Aiden Forest S1",
+    "Faimon Volcano S1",
+    "Vrofagus Ruins S4",
+    "Tamor Desert S3",
+    "Hydeni Ruins S5",
+    "Telain Forest S1",
+    "Mt. White Ragon S2",
+    "Kabir Ruins S4",
+    "Mt. Siz S2",
+    "Garen Forest S3",
     "------------------------------------------",
-    "Toa + Arena",
+    "Toa",
     "Live Arena",
     "Speed QuickClick"
   }
@@ -519,6 +521,10 @@ function dialogBox()
   addSpinner("dungeonLevel", spinnerLevel, spinnerLevel[10])
   newRow()
   addTextView("Dungeon level only applies to Carios Dungeon.")
+  newRow()
+  addCheckBox("runRival", "Arena Rivals?", false)
+  addTextView("  ")
+  addCheckBox("runMatchUp", "Arena Match-Up?", false)
   newRow()
   addCheckBox("runMagicShop", "Check Magic Shop for scrolls:", false)
   newRow()
@@ -659,7 +665,7 @@ function dialogBox()
   addTextView("Scan Speed: ")
   addSpinner("scanSpeed", spinnerScanSpeed, spinnerScanSpeed[2])
   newRow()
-  addSpinner("imgDetectPct", spinnerImgDetectPct, spinnerImgDetectPct[5])
+  addSpinner("imgDetectPct", spinnerImgDetectPct, spinnerImgDetectPct[3])
   addTextView("% image accuracy")
   addTextView("    ")
   addSpinner("runeDetectPct", spinnerRuneDetectPct, spinnerRuneDetectPct[5])
@@ -779,7 +785,7 @@ function advancedOptionsDialog()
   addTextView("    Scan Speed: ")
   addSpinner("scanSpeed", spinnerScanSpeed, spinnerScanSpeed[2])
   newRow()
-  addSpinner("imgDetectPct", spinnerImgDetectPct, spinnerImgDetectPct[5])
+  addSpinner("imgDetectPct", spinnerImgDetectPct, spinnerImgDetectPct[3])
   addTextView("% Image Accuracy")
   addTextView("    ")
   addSpinner("runeDetectPct", spinnerRuneDetectPct, spinnerRuneDetectPct[5])
@@ -794,97 +800,67 @@ function setDialogOptions()
   elseif farmLoc == spinnerFarmLoc[2] then
   elseif farmLoc == spinnerFarmLoc[3] then
     runGiant = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[4] then
     runDragon = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[5] then
     runNecro = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[6] then
     runHallMagic = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[7] then
     runHallLight = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[8] then
     runHallDark = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[9] then
     runHallFire = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[10] then
     runHallWater = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[11] then
     runHallWind = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[12] then
     runSD = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[13] then
   elseif farmLoc == spinnerFarmLoc[14] then
     runRiftFire = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[15] then
     runRiftIce = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[16] then
     runRiftWind = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[17] then
     runRiftLight = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[18] then
     runRiftDark = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[19] then
     runRiftRaid = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[20] then
   elseif farmLoc == spinnerFarmLoc[21] then
     runChiruka = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[22] then
     runRunar = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[23] then
     runFerun = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[24] then
     runAiden = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[25] then
     runFaimon = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[26] then
     runVrofagus = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[27] then
     runTamor = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[28] then
     runHydeni = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[29] then
     runTelain = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[30] then
     runWhiteRagon = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[31] then
     runKabir = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[32] then
     runSiz = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[33] then
     runGaren = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[34] then
   elseif farmLoc == spinnerFarmLoc[35] then
     runTOA = true
-    runArena = true
   elseif farmLoc == spinnerFarmLoc[36] then
     runLiveArena = true
   elseif farmLoc == spinnerFarmLoc[37] then
@@ -1065,6 +1041,11 @@ function setDialogOptions()
     elseif maxDetectPct == spinnerMaxDetectPct[9] then
       maxDetect = 0.99
     end
+  end
+  if runRival == false and runMatchUp == false then
+    runArena = false
+  else
+    runArena = true
   end
   if refillOption == spinnerRefillOption[1] then
     refillEnergy = false
@@ -2022,7 +2003,7 @@ function runeKeep5 ()
   runeStatRegion:highlight(runeStatString)
 end
 function sellGetRune ()
-  if grindstoneRegion:exists(Pattern("grindTilde.png"):similar(.8), 0.1) then
+  if grindstoneRegion:exists(Pattern("grindTilde.png"):similar(imgAccuracy), 0.1) then
     getRune()
   elseif enchantedGemRegion:exists(Pattern("enchantedGem.png"):similar(.6), 0.1) then
     getRune()
@@ -2118,11 +2099,14 @@ function refreshList()
   refreshList2Region:existsClick(Pattern("refreshList2.png"):similar(imgAccuracy * 0.8), 2)
 end
 function existsArenaRival()
-  if arenaRivalNumberRegion:exists(Pattern("arenaRivalNumber.png"):similar(imgAccuracy), 3) then
-    arenaRivalRegion:existsClick(Pattern("arenaRivalNumber.png"), 3)
-    isArenaRival = true
-      toast("Finding a Rival")
-  else
+  if runRival == true then
+    if arenaRivalNumberRegion:exists(Pattern("arenaRivalNumber.png"):similar(imgAccuracy), 3) then
+      arenaRivalRegion:existsClick(Pattern("arenaRivalNumber.png"), 3)
+      isArenaRival = true
+        toast("Finding a Rival")
+    end
+  end
+  if runMatchUp == true then
     arenaMatchupRegion:existsClick(Pattern("matchUp.png"), 0.1)
     isArenaRival = false
       toast("Finding a Matchup")
