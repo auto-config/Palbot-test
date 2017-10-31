@@ -2158,7 +2158,7 @@ function arenaBattle()
         wait(1)
         startRegion:existsClick(Pattern("start.png"):similar(imgAccuracy), 2)
         waitClickArenaRival()
-      else
+      elseif runMatchUp == true then
         arenaMatchupRegion:existsClick(Pattern("matchUp.png"), 0.1)
         if arenaWingRegion:exists(Pattern("wing.png"):similar(imgAccuracy), 2) then
           arenaWingRegion:existsClick(Pattern("wing.png"):similar(imgAccuracy), 2)
