@@ -2200,6 +2200,18 @@ function arenaBattle()
             end
           end
         end
+      elseif runMatchUp == false
+        if farmLoc == spinnerFarmLoc[19] then
+          runRiftRaid = true
+          arenaCheck = false
+          closeArenaDialogBox()
+          runScenarioDungeon()
+          runRiftRaidStart()
+        else
+          arenaCheck = false
+          closeArenaDialogBox()
+          runScenarioDungeon()
+          start()
       end
     end
   end
