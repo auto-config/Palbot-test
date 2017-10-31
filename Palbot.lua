@@ -2105,8 +2105,7 @@ function existsArenaRival()
       isArenaRival = true
         toast("Finding a Rival")
     end
-  end
-  if runMatchUp == true then
+  elseif runMatchUp == true then
     arenaMatchupRegion:existsClick(Pattern("matchUp.png"), 0.1)
     isArenaRival = false
       toast("Finding a Matchup")
