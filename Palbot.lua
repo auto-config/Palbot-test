@@ -2120,8 +2120,10 @@ function waitClickArenaRival()
   end
 end
 function arenaBattle()
+  wait(2)
   if runRival == true and runMatchUp == false then
-    arenaRivalRegion:existsClick(Pattern("ArenaRival.png"), 3)
+    click(Location (325, 370))
+    isArenaRival = true
   end
   existsArenaRival()
   if arenaWingRegion:exists(Pattern("wing.png"):similar(imgAccuracy), 2) then
